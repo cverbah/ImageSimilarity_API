@@ -8,3 +8,4 @@ matplotlib==3.3.2
 Flask==1.1.2
 flask-restx==0.2.0
 gunicorn==20.1.0
+transformer-utils==0.1.1
