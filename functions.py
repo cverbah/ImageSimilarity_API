@@ -9,12 +9,14 @@ import requests
 import matplotlib.pyplot as plt
 from transformers import ViTModel, ViTImageProcessor
 import os
+from transformer_utils.low_memory import enable_low_memory_load
 
 # no mostrar los warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # ##### Models ##########
 # VIT Model
+enable_low_memory_load()
 preprocess_img = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
 model_vit = ViTModel.from_pretrained("google/vit-base-patch16-224-in21k")
 
