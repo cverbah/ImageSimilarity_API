@@ -5,7 +5,7 @@ Models used for generating the images embeddings: </br>
 - <b>Vision Transformer(VIT)</b> 
 - <b>Resnet50v2</b> 
 
-<b>Required Inputs:</b> </br>
+Required Inputs: </br>
 - Customer Image URL
 - Retail Image URL
 
