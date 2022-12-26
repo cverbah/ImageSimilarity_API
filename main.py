@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import io
 plt.style.use('seaborn-white')
-
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # ### API #####
 app = Flask(__name__)
@@ -116,7 +116,7 @@ class PlotThreshold(Resource):
 
 
 if __name__ == "__main__":
-    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
     # HOST_NAME = 'localhost'
     # PORT = 5000
     app.run()  #debug=True
