@@ -119,4 +119,4 @@ if __name__ == "__main__":
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
     # HOST_NAME = 'localhost'
     # PORT = 5000
-    app.run(debug=True)
+    app.run()  #debug=True
