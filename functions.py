@@ -15,9 +15,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # ##### Models ##########
 # VIT Model
-#preprocess_img = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
-
-#model_vit = ViTModel.from_pretrained("google/vit-base-patch16-224-in21k")
+preprocess_img = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
+model_vit = ViTModel.from_pretrained("google/vit-base-patch16-224-in21k")
 
 # Resnet50v2-avg Pooling
 model_resnet50_v2_avg = tf.keras.applications.ResNet50V2(
@@ -27,7 +26,7 @@ model_resnet50_v2_avg = tf.keras.applications.ResNet50V2(
     input_shape=None,
     pooling='avg',  # global avg pooling will be applied
 )
-model_vit = model_resnet50_v2_avg
+#model_vit = model_resnet50_v2_avg #solo pa probar!
 
 # ########### Functions ######################
 
