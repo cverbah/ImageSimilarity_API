@@ -1,6 +1,2 @@
 runtime: python37
-env: flex
-resources:
-  cpu: 2
-  memory_gb: 8
-  disk_size_gb: 2
+instance: F4_1G
