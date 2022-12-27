@@ -7,7 +7,7 @@ import tensorflow as tf
 from numpy.linalg import norm
 import requests
 import matplotlib.pyplot as plt
-from transformers import ViTModel, ViTImageProcessor
+#from transformers import ViTModel, ViTImageProcessor
 import os
 
 # no mostrar los warnings
