@@ -18,8 +18,6 @@ app = Flask(__name__)
 api = Api(app, version='1.0', title='Image Similarity API', description='Geti Solutions - created by Cristian Vergara',
           default="Available Methods", contact='cvergara@geti.cl')
 
-model_vit = model_vit
-model_resnet50_v2_avg = model_resnet50_v2_avg
 
 #predict method
 similarity_args = reqparse.RequestParser()
