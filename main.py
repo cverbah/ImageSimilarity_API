@@ -1,7 +1,5 @@
 # libraries
 from functions import *
-import PIL
-import transformers
 import json
 import os
 from flask import Flask, Response
