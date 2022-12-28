@@ -7,7 +7,7 @@
 ![Flask](https://img.shields.io/badge/-Flask-000000?logo=flask&logoColor=white&style=plastic)
 ![Numpy](https://img.shields.io/badge/-Numpy-013243?logo=numpy&logoColor=white&style=plastic)
 ![OpenCV](https://img.shields.io/badge/-OpenCV-5C3EE8?logo=opencv&logoColor=white&style=plastic)
-![TensorFlow](https://img.shields.io/badge/--FF6F00?logo=Tensorflow&logoColor=white&style=plastic)
+![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F00?logo=Tensorflow&logoColor=white&style=plastic)
 
 
 #Available Models used for generating the images embeddings: 
