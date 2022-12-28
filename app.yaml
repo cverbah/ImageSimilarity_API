@@ -1,5 +1,5 @@
 runtime: python
-service: Img_Similarity_v1
+service: ImgSimilarity-v1
 env: flex
 entrypoint: gunicorn -b :$PORT main:app
 runtime_config:
