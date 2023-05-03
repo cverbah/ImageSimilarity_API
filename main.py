@@ -1,10 +1,13 @@
 # libraries
 from functions import *
+
 import json
 import os
-from flask import Flask, Response
+from platform import python_version
+from flask import Flask
 from flask_restx import Api, Resource, reqparse
 import warnings
+from flask import Response
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import io
@@ -13,7 +16,7 @@ plt.style.use('seaborn-white')
 
 # ### API #####
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Image Similarity API', description='Geti Solutions - created by Cristian Vergara',
+api = Api(app, version='1.1', title='Image Similarity API', description='Geti Solutions - created by Cristian Vergara',
           default="Available Methods", contact='cvergara@geti.cl')
 
 
@@ -95,7 +98,7 @@ class PlotThreshold(Resource):
                 except Exception as e:
                     output = {
                         "error": str(e),
-                        "url error 1": str(url),
+                        "url error": str(url),
                     }
                     return json.dumps(output), 404
 

@@ -9,6 +9,8 @@ import requests
 import matplotlib.pyplot as plt
 from transformers import ViTModel, ViTImageProcessor
 import os
+import io
+import warnings
 
 # no mostrar los warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -16,8 +18,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 # ##### Models ##########
 # VIT Model
 preprocess_img = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
-model_vit = ViTModel.from_pretrained("google/vit-base-patch16-224-in21k") 
-#model_vit = ViTModel.from_pretrained('vit_model.bin',config='vit_model_config.json') ##probando!
+model_vit = ViTModel.from_pretrained("google/vit-base-patch16-224-in21k")
+
 # Resnet50v2-avg Pooling
 model_resnet50_v2_avg = tf.keras.applications.ResNet50V2(
     include_top=False,
@@ -26,15 +28,29 @@ model_resnet50_v2_avg = tf.keras.applications.ResNet50V2(
     input_shape=None,
     pooling='avg',  # global avg pooling will be applied
 )
-#model_resnet50_v2_avg = model_vit #solo pa probar!
+
 
 # ########### Functions ######################
 
 
 def crop_product(url_img, blur_kernel=15):
     '''crops a product from an image'''
+
+    headers = {'User-Agent': 'Mozilla/5.0 ...'}
+    # fix possible errors in url: <--- PUEDE SER MEJORADO ESTA PARTE. para casos con la url con ruido
+    if url_img[:8] == 'https://':
+        url_img = url_img.split('https://')[-1]
+        url_img = 'https://' + url_img
+
+    elif url_img[:7] == 'http://':
+        url_img = url_img.split('http://')[-1]
+        url_img = 'http://' + url_img
+
+    elif url_img[:8] != 'https://':
+        url_img = 'https:' + url_img
     try:
-        img = Image.open(requests.get(url_img, stream=True).raw)
+        response = requests.get(url_img, stream=True, headers=headers)
+        img = Image.open(io.BytesIO(response.content))
         img_mode = img.mode
 
     except Exception as e:
@@ -57,8 +73,7 @@ def crop_product(url_img, blur_kernel=15):
     gray = cv2.cvtColor(img.copy(), cv2.COLOR_RGB2GRAY)
     gray = cv2.blur(gray, (blur_kernel, blur_kernel))
     thresh = cv2.threshold(gray, 252, 255, cv2.THRESH_BINARY_INV)[1]
-    #thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY +cv2.THRESH_OTSU)[1] # no funciona bien..como determina automatico el threshold confunde los colores claros con el fondo blanco
-                                                                                #BUENO para el caso en que el fondo no es blanco y el color es muy distinto al del objeto
+    #thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY +cv2.THRESH_OTSU)[1] # #BUENO para el caso en que el fondo no es blanco y el color es muy distinto al del objeto
     alpha = 1  # for undefined cases : x/0 (no white pixels)
     ratio = cv2.countNonZero(thresh)/((img.shape[0] * img.shape[1]) - cv2.countNonZero(thresh) + alpha)
 
@@ -152,14 +167,13 @@ def cosine_distance(url_img1, url_img2, model, crop=0):
 def thresholding_display(img1, img2):
     '''plots the base image, thresholded and cropped'''
 
-    img1_display,img1_cropped, img1_threshold, img1_ratio = crop_product(img1)
+    img1_display, img1_cropped, img1_threshold, img1_ratio = crop_product(img1)
     img1_ratio = round(img1_ratio, 3)
 
-    img2_display,img2_cropped, img2_threshold, img2_ratio = crop_product(img2)
+    img2_display, img2_cropped, img2_threshold, img2_ratio = crop_product(img2)
     img2_ratio = round(img2_ratio, 3)
 
-    # define subplots
-    fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(8, 8))
+    fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(8, 8)) # define subplots
     #Customer
     #original
     ax[0,0].set_xlabel('pixels')
@@ -207,3 +221,5 @@ def check_url(url):
     ''''returns code status from requesting a url'''
     code = requests.head(url).status_code
     return code
+
+
