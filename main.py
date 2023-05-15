@@ -4,7 +4,7 @@ from functions import *
 import json
 import os
 from platform import python_version
-from flask import Flask
+from flask import Flask, jsonify, make_response
 from flask_restx import Api, Resource, reqparse
 import warnings
 from flask import Response
@@ -16,7 +16,7 @@ plt.style.use('seaborn-white')
 
 # ### API #####
 app = Flask(__name__)
-api = Api(app, version='1.1', title='Image Similarity API', description='Geti Solutions - created by Cristian Vergara',
+api = Api(app, version='1.11', title='Image Similarity API', description='Geti Solutions - created by Cristian Vergara',
           default="Available Methods", contact='cvergara@geti.cl')
 
 
@@ -45,11 +45,11 @@ class SimilarityScore(Resource):
                 try:
                     check_url(url)
                 except Exception as e:
-                    output = {
+                    response = make_response(jsonify({
                         "error": str(e),
-                        "url error": str(url),
-                    }
-                    return json.dumps(output), 404
+                        "url with error": str(url),
+                    }), 404)
+                    return response
 
             crop = args.get('crop')
             model = args.get('model')
@@ -59,20 +59,20 @@ class SimilarityScore(Resource):
             if model == 'ResNet50_v2':
                 score = similarity_score(url_img_cliente, url_img_retail, model_resnet50_v2_avg, crop=crop)
 
-            output = {
-                "similarity_score": float(score),
+            response = make_response(jsonify({
+                "similarity_score": round(float(score), 4),
                 "model": str(model),
                 "crop": int(crop),
                 "url_cliente": str(url_img_cliente),
                 "url_retail": str(url_img_retail),
-            }
-            return json.dumps(output), 200
+            }), 200)
+            return response
 
         except Exception as e:
-            output = {
+            response = make_response(jsonify({
                 "error": str(e)
-            }
-            return json.dumps(output), 400
+            }), 400)
+            return response
 
 
 # plot method
@@ -96,11 +96,11 @@ class PlotThreshold(Resource):
                 try:
                     check_url(url)
                 except Exception as e:
-                    output = {
+                    response = make_response(jsonify({
                         "error": str(e),
-                        "url error": str(url),
-                    }
-                    return json.dumps(output), 404
+                        "url with error": str(url),
+                    }), 404)
+                    return response
 
             fig = thresholding_display(url_img_cliente, url_img_retail)
             output = io.BytesIO()
@@ -109,10 +109,10 @@ class PlotThreshold(Resource):
 
         except Exception as e:
 
-            output = {
+            response = make_response(jsonify({
                 "error": str(e)
-            }
-            return json.dumps(output), 400
+            }), 400)
+            return response
 
 
 if __name__ == "__main__":
